@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Arquitetura%20de%20Software%20Distribuidos/Cultura%20e%20Pr%C3%A1ticas%20DataOps%20e%20MLOps/projetos/mlops/mlruns/0/4a75850ce1044f3fa2e62f5bede383cc/artifacts
+end_time: 1708796631111
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4a75850ce1044f3fa2e62f5bede383cc
+run_name: experiment_mlops_ead
+run_uuid: 4a75850ce1044f3fa2e62f5bede383cc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1708796620122
+status: 3
+tags: []
+user_id: lucin
