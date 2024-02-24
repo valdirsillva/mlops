@@ -23,6 +23,7 @@ def reset_seeds():
    np.random.seed(42)
    random.seed(42)
 
+# return tuple (x, y)
 def read_data():
     data = pd.read_csv('https://raw.githubusercontent.com/renansantosmendes/lectures-cdas-2023/master/fetal_health_reduced.csv')
     X = data.drop(["fetal_health"], axis=1)
@@ -82,7 +83,9 @@ def train_model(model, X_train, y_train, is_train=True):
 
 if __name__ == "__main__":
     X, y = read_data()
+
     X_train, X_test, y_train, y_test = process_data(X,y)
     model = create_model(X)
+    # Configura o mlflow
     config_mlflow()
     train_model(model, X_train, y_train)
