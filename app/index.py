@@ -6,11 +6,21 @@ import numpy as np
 from pydantic import BaseModel
 from fastapi import FastAPI
 
+
+class FetalHealthData(BaseModel):
+    accelerations: float
+    fetal_movement: float
+    uterine_contractions: float
+    severe_decelerations: float
+
+
 app = FastAPI(title="Fetal Health API",
               openapi_tags=[
                   { "name":"Health", "description":"Get api health" },
                   { "name":"Prediction", "description":"Model prediction" }
               ])
+
+
 
 # Função p/ carregamento do Modelo
 def load_model():
@@ -26,7 +36,7 @@ def load_model():
     print('creating client...')
     client = mlflow.MlflowClient(tracking_uri=MLFLOW_TRACKING_URI)
     print('getting registered model...')
-    registered_model = client.get_registered_model('fetah_health')
+    registered_model = client.get_registered_model('fetal_health')
     print('read model...')
     run_id = registered_model.latest_versions[-1].run_id
     logged_model = f'runs:/{run_id}/model'
@@ -36,27 +46,31 @@ def load_model():
     return loaded_model
 
 
+@app.on_event(event_type='startup')
+def startup_event():
+    global loaded_model
+    loaded_model = load_model()
+
+
+
 @app.get(path='/', tags=['Health'])
 def api_health():
     return { "status":"healthy" }
 
 @app.post(path='/predict', tags=['Prediction'])
-def predict():
-    loaded_model = load_model()
-    
-    accelerations = 0
-    fetal_movement = 0
-    uterine_contractions = 0
-    severe_decelerations = 0
+def predict(request: FetalHealthData):
+    global loaded_model
 
     received_data = np.array([
-        accelerations,
-        fetal_movement,
-        uterine_contractions,
-        severe_decelerations,
+        request.accelerations,
+        request.fetal_movement,
+        request.uterine_contractions,
+        request.severe_decelerations,
     ]).reshape(1, -1)
 
-    print(loaded_model.predict(received_data))
-    return { "prediction": 0 }
+    print(received_data)
+    prediction = loaded_model.predict(received_data)
+    # print(prediction)
+    return { "prediction": str(np.armax(prediction[0])) }
 
 
