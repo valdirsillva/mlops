@@ -71,6 +71,6 @@ def predict(request: FetalHealthData):
     print(received_data)
     prediction = loaded_model.predict(received_data)
     # print(prediction)
-    return { "prediction": str(np.armax(prediction[0])) }
+    return { "prediction": str(np.argmax(prediction[0])) }
 
 
